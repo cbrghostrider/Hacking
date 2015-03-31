@@ -1,0 +1,128 @@
+#if 0
+compile line:
+/usr/intel/pkgs/gcc/4.6.2/bin/g++ -std=c++0x justify2.cc
+#endif
+
+#include <memory>
+#include <functional>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <numeric>
+#include <vector>
+
+using namespace std;
+
+enum Alignment {LEFT, CENTER, RIGHT};
+char const SPACE = ' ';
+char const * DELIMITERS = " \n\t";
+
+ostream & operator << (ostream & o, vector<string> const & v)
+{
+  for_each(v.begin(), v.end(), [&o] (string const & s) -> void { o << s << "|\n"; });
+  return o;
+}
+
+// breaks up cs into individual tokens, based on delimiters
+vector<string> tokenize(char * cs, char  const * delimiters)
+{
+  vector<string> tokens;
+  char * tok = strtok(cs, delimiters);
+  while(tok){
+    tokens.push_back(tok);
+    tok = strtok(NULL, delimiters);  
+  }
+  return tokens;
+}
+  
+typedef std::pair<unsigned int, vector<string> > LineInfoType;
+//this corresponds to the accumulator type [(Int, [String])] in Haskell
+typedef vector<LineInfoType> AccumType;
+
+unsigned int getNewCurrLength(unsigned int cl, string word)
+{
+    return (cl == 0 ? word.length() : cl + 1 + word.length() );
+}
+
+string leftAlign(LineInfoType lineInfo)
+{
+    auto numOccupied = lineInfo.first;
+    auto allWords = lineInfo.second;
+
+    string lineSoFar;
+
+    for (auto it = allWords.begin() ; it != allWords.end(); it++) {
+	lineSoFar += " " + *it;
+    }
+    return lineSoFar;
+}
+
+// generic justify function
+// returns the result in vector of strings, each line justified according to alignment
+// no \n at end of lines
+vector<string> justifyLeft__(string const & st, size_t pageWidth)
+{
+  string cs(st.begin(), st.end()); // make deep copy
+  auto words = tokenize(const_cast<char *>(cs.c_str()), DELIMITERS); // tokenize with specified delimiters
+
+  vector<string> empty;
+  LineInfoType initAccumPair = LineInfoType(0, empty);
+  AccumType acc;
+  acc.push_back(initAccumPair);
+
+  auto num = pageWidth;
+    //this corresponds to the lambda function I use for foldl in Haskell code
+    auto foldlFunc = [num] (AccumType lenWdSeq, string word) -> AccumType
+    {
+	auto lenWdLast = lenWdSeq.back();
+	auto currLen = lenWdLast.first; 
+	auto currWds = lenWdLast.second; 
+
+	LineInfoType thisWs;
+
+	auto ret = lenWdSeq;
+	ret.pop_back();
+
+	if (getNewCurrLength(currLen, word) <= num) {
+	    thisWs.first = getNewCurrLength(currLen, word);
+	    thisWs.second = currWds;
+	    thisWs.second.push_back(word);
+	    ret.push_back(thisWs);
+	} else {
+	    thisWs.first = word.length();
+	    thisWs.second.push_back(word);
+	    ret.push_back(lenWdLast);
+	    ret.push_back(thisWs);
+	}
+
+	return ret;
+    };
+
+  AccumType listNumAndWords = std::accumulate(words.begin(), words.end(), acc, foldlFunc);
+  vector<string> final;
+  for (auto it = listNumAndWords.begin(); it != listNumAndWords.end(); it++) {
+      final.push_back(leftAlign(*it));
+  }
+  return final;
+}
+
+int main(void)
+{
+
+  string s("  I've been singing with my band, cross\t\t\n the wire cross \nthe land, I've seen every blue eyed floozy on the way, but their beauty and their style went kind of moot after a while, \ntake me to them dirty ladies every time,\tFat\tbottomed\tgirls\tyou\tmake\tthe\trocking world\tgo\tround.   ");
+
+  cout << justifyLeft__(s, 22) << endl;
+  return 0;
+/*
+  cout << justify(s, 22, LEFT) << endl;
+  cout << justify(s, 22, RIGHT) << endl;
+  cout << justify(s, 22, CENTER) << endl;
+
+  cout << justify(s, 13, LEFT) << endl;
+  cout << justify(s, 13, RIGHT) << endl;
+  cout << justify(s, 13, CENTER) << endl;
+  return 0;
+  */
+}
+

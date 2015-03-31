@@ -1,0 +1,84 @@
+Case #1:
+a a b b
+a b b b
+b b b b
+b b b b
+Case #2:
+a a a a
+a a a a
+a a b b
+b b b b
+Case #3:
+a a
+b a
+Case #4:
+a a a a a
+a a a a a
+a a a a a
+a a a a a
+a a a a a
+a a a a a
+a a a a a
+a a a a a
+Case #5:
+a a a a a a a a a b
+Case #6:
+a a a a a
+b b b a a
+Case #7:
+a a
+a b
+Case #8:
+a a a a a
+a a a a a
+a a a a a
+b b a a a
+b b b a a
+b b b b a
+b b b b a
+b b b b a
+b b b b a
+Case #9:
+a a a a
+a a a a
+a a a a
+a a a a
+Case #10:
+a a b b
+a a a b
+a a a a
+a a a a
+Case #11:
+a b b b b b
+a b b b b b
+Case #12:
+a b b b
+a b b b
+Case #13:
+a a a a
+a a a a
+a a b b
+b b b b
+Case #14:
+a a a a
+a a a a
+a a a a
+b b b b
+Case #15:
+a a a
+b b b
+Case #16:
+a a a b
+a a a b
+a a b b
+a a b b
+Case #17:
+a a a
+a a a
+Case #18:
+a b b b
+a b b b
+a a b b
+a a a a
+Case #19:
+a

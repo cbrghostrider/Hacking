@@ -1,0 +1,39 @@
+import System.Environment (getArgs)
+import Data.Array
+
+source :: String 
+source = "welcome to code jam"
+
+main = do
+  [ipfile] <- getArgs
+  ip <- readFile ipfile
+  writeFile ((takeWhile (/= '.') ipfile) ++ ".out") (processInput ip)
+
+
+outputString :: [String] -> [String]
+outputString = outputString' 1
+  where outputString' n []     = []
+        outputString' n (x:xs) = ("Case #" ++ (show n) ++ ": " ++ x) : outputString' (n+1) xs
+
+integerToText :: Int -> String
+integerToText = reverse . take 4 . reverse . ("0000" ++) . show
+
+subsequence :: String -> String -> Int
+subsequence ss ws = go 0 (length ss - 1) 0 (length ws - 1)
+  where
+    go :: Int -> Int -> Int -> Int -> Int
+    go si sj wi wj
+      | (sj - si) > (wj - wi) = 0
+      | si > sj = 1
+      | wi > wj = 0
+      | otherwise = 
+          if ss !! si == ws !! wi
+             then ds ! ((si + 1), sj, (wi + 1), wj) + ds ! (si, sj, (wi + 1), wj)
+             else ds ! (si, sj, (wi + 1), wj)
+    (bs, bw) = (length ss, length ws)
+    bounds = ((0, 0, 0, 0), (bs, bs, bw, bw))  
+    ds = listArray bounds [go si sj wi wj | si <- [0..bs], sj <- [0..bs], wi <- [0..bw], wj <- [0..bw]] 
+
+processInput :: String -> String
+processInput = unlines . outputString . map (integerToText . subsequence source) . tail . lines
+
