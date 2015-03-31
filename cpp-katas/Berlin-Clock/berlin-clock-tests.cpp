@@ -1,9 +1,4 @@
-/*
- * berlin-clock-tests.cpp
- *
- *  Created on: Oct 24, 2014
- *      Author: rmhyman
- */
+//Author - ssjoshi
 #include <gtest/gtest.h>
 
 #include <sstream>

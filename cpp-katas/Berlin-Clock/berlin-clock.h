@@ -1,9 +1,4 @@
-/*
- * poker-hand.h
- *
- *  Created on: Oct 17, 2014
- *      Author: rmhyman
- */
+//Author ssjoshi
 
 #ifndef BERLIN_CLOCK_H_
  #define BERLIN_CLOCK_H_

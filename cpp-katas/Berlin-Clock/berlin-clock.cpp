@@ -1,4 +1,4 @@
-//Insert code here
+//Author ssjoshi
 
 #include "berlin-clock.h"
 #define COUNTS_PER_LAMP (5) // 5 ticks of something (mins or hrs) causes one lamp in hi low to be lit

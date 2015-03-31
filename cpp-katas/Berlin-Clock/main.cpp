@@ -1,9 +1,4 @@
-/*
- * main.cpp
- *
- *  Created on: Oct 17, 2014
- *      Author: rmhyman
- */
+//Author ssjoshi
 #include <iostream>
 #include "berlin-clock.h"
 using namespace std;
