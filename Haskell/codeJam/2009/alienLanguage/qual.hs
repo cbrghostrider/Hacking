@@ -1,19 +1,5 @@
 import System.Environment (getArgs)
 
--- for attempt 2 use following logic:
--- 1. make convert without the fold
--- 2. make DxL array of bools, set all to false
---    ^^ this represents letter dict[r][c] present in input (call array dict_flag[][])
--- 2. for all tokens   -- token # i
---      for all dictionary words  -- word # w
---        for all letters within token  -- letter # j
---          if dict[w][i] == letter #j of ith token
---            dict_flag[w][i] = true;
---            
--- 4. Keep those dict[w] for whom all dict[w][.] = true
--- 5. # of words left in dict is answer for that input case
---
-
 {-
 main :: IO ()
 main = do
