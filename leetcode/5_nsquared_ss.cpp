@@ -6,7 +6,7 @@ public:
     string getPalindromeAtCenter(const string& s, int l, int r) {
         assert(l == r || l+1 == r);
         
-        if (s[l] != s[r] || r >= s.size()) {
+        if (r >= s.size() || s[l] != s[r]) {
             return string("");
         }
         
