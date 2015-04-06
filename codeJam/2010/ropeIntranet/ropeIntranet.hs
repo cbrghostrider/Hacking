@@ -1,9 +1,6 @@
 import System.Environment (getArgs)
-import Data.Maybe
-import Data.Monoid
 import Data.Ord
 import Data.List
-import Debug.Trace 
 
 type Wire    = (Int, Int)
 type Problem = [Wire]
