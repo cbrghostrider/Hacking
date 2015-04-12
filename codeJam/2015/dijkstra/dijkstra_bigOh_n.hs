@@ -88,18 +88,10 @@ getS3Starts p =
                     ((Plus, '1'), []) $ zip str [start..end]
   in  snd $ fres
 
--- evaluates the multiplication for the middle string
-evaluateMiddle :: Problem -> Index -> Index -> Quat
-evaluateMiddle p sm em = 
-  let str = take (em - sm + 1) . drop sm $ p
-      mult = foldr (\s acc -> qMult s acc) (Plus, '1') str
-  in  if null str then error "Off by 1 error!" else mult
-
 solveProblem :: Problem -> Result
 solveProblem s = 
   let indS1Ends   = getS1Ends   s   -- indices from [0, to any in indS1Ends] evaluate to i
       indS3Starts = getS3Starts s   -- indices from [any in indS3Starts to, (length p - 1)] evaluate to k
-      midIndices  = [(ef + 1, sl - 1) | ef <- indS1Ends, sl <- indS3Starts, sl > ef] 
       wholeString = (== (Minus, '1')) . foldr (\s acc -> qMult s acc) (Plus, '1') $ s  -- is whole string "ijk" which is (-1)
       s1EarliestEnd = head . sort $ indS1Ends
       s3LatestStart = last . sort $ indS3Starts
