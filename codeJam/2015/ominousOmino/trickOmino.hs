@@ -96,7 +96,7 @@ solveProblem pb@(5, r, c)
   | multiplesCheck pb /= Nothing = RICHARD
   | ellShapeCheck  pb /= Nothing = RICHARD
   | c == 3 && r >= 5 && r <= 9   = RICHARD  -- pick W shape to win
-  | r == 3 && r >= 5 && r <= 9   = RICHARD  -- pick W shape to win
+  | r == 3 && c >= 5 && c <= 9   = RICHARD  -- pick W shape to win
   | otherwise                    = GABRIEL
 
 -- honestly, I have no idea how I can solve the case for 6
