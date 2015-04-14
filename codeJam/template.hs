@@ -13,13 +13,11 @@ main = do
   ip <- readFile file
   writeFile ((takeWhile (/= '.') file) ++ ".out" ) (processInput ip)
 
-writeOutput :: [Result] -> [String]
-writeOutput = writeOutput' 1
-  where writeOutput' _ [] = []
-        writeOutput' n (r:rs) = ("Case #" ++ (show n) ++ ": " ++ (writeResult r)) : writeOutput' (n+1) rs
+writeOutput :: [(Int, Result)] -> [String]
+writeOutput = map (\(i, r) -> ("Case #" ++ (show i) ++ ": " ++ (writeResult r)))
 
 processInput :: String -> String
-processInput = unlines . writeOutput . map solveProblem . parseProblem . tail . lines
+processInput = unlines . writeOutput . zip [1..] . map solveProblem . parseProblem . tail . lines
 
 writeResult :: Result -> String
 writeResult = undefined
