@@ -103,18 +103,6 @@ bool checkTest (Quat** arr, unsigned int limit)
         unsigned int s2_start = s1_end + 1;
         for (unsigned int s3_start = s2_start + 1; s3_start <= limit - 1; s3_start++) {
             unsigned int s2_end = s3_start - 1;
-            assert(s1_start >= 0 && s1_start <= limit - 3);
-            assert(s1_end >= s1_start && s1_end <= limit - 3);
-            assert(s2_start > s1_end);
-            if (!(s2_end < s3_start) ){
-                std::cout << limit << std::endl;
-                std::cout << "(" << s1_start << ", " << s1_end << ")" << std::endl;
-                std::cout << "(" << s2_start << ", " << s2_end << ")" << std::endl;
-                std::cout << "(" << s3_start << ", " << s3_end << ")" << std::endl;
-                assert(0);
-            }
-            assert(s3_start > s2_end  && s3_start <= limit - 1);
-            assert(s3_end >= s3_start && s3_end <= limit - 1);
             if (arr[s1_start][s1_end] == qi && 
                 arr[s2_start][s2_end] == qj && 
                 arr[s3_start][s3_end] == qk) {
