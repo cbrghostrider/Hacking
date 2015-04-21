@@ -58,7 +58,7 @@ simulateHairCut crs =
 -- then returns total number of customers served, in this LCM time
 lcmCustsServed :: [Int] -> Int
 lcmCustsServed (r:rs) = 
-  let lcmtime     = foldr (\lcmMid num -> if lcmMid `mod` num == 0 then lcmMid else lcm lcmMid num) (r) $ (r:rs)
+  let lcmtime     = foldl' (\num lcmMid -> if lcmMid `mod` num == 0 then lcmMid else lcm lcmMid num) (last (r:rs)) $ (r:rs)
       custsServed = map (\time -> lcmtime `div` time) (r:rs)
   in  sum custsServed
 
@@ -69,7 +69,7 @@ solveProblem pb@(n, ms) =
       minTime  = snd . minimumBy (comparing snd) $ zip [1..] ms
       allMinIndices = map fst . filter ((==minTime) . snd) $ zip [1..] ms
       initProb = zip (repeat 0) ms  -- barbers (times-to-completion, reset-times) 
-      result = foldr (\_ (_, pb) -> let (barb, newcs) = simulateHairCut pb in (barb, zip newcs ms)) (0, initProb)$ [1..leftovers]
+      result = foldl' (\(_, pb) _ -> let (barb, newcs) = simulateHairCut pb in (barb, zip newcs ms)) (0, initProb)$ [1..leftovers]
   in  if leftovers == 0 then last allMinIndices else 1 + (fst result)
 
 
