@@ -1,0 +1,40 @@
+Credit: The original credit for the paradox code example goes to Houliang Lu
+from the algorithms class. I formalized his suggestion by presenting it as a 
+proof by contradiction.
+
+Halting Problem: Given a program and an input, design an algorithm that
+outputs whether the program halts with that input.
+
+Claim: An algorithm to solve the halting problem cannot exist. 
+
+Proof: By contradiction. 
+
+Let us assume that such an algorithm in fact exists. 
+
+bool halting_algo(char* program, char* input);
+This algorithm will return true if program halts with input, 
+and false if program does not halt with input.
+
+Consider the following program:
+bool paradox(char* program, char* input){
+  if(halting_algo(program, append(program, input))){
+    while(1) 
+        ;
+    return true; //never reached
+  }else{
+    return false;//irrelevant
+  }
+}
+
+And finally if we call 
+paradox(paradox, input)
+
+If halting_algo(paradox, input) will return true, it means that paradox will halt with this input. 
+But in fact, this will force paradox into the while(1) ; infinite loop and it won't halt.
+
+If halting_algo(paradox, input) will return false, it means that paradox won't halt with this input. 
+But this  forces us to go into the else case, and paradox in fact halts (returning a value false, which is irrelevant).
+
+Due to these contradictions, we can assume our original statement (halting algorithm exists) is false. 
+So halting algorithm cannot exist.
+
