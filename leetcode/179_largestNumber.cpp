@@ -25,7 +25,7 @@ public:
         //everything so far has matched (so lhs is a prefix of rhs or vice-versa)
         
         if (plhs == lhs.size() && prhs == rhs.size()) {
-            return false; //numbers are the same, doesn't matter
+            return false; 
         }
         
         if (plhs == lhs.size()) {
