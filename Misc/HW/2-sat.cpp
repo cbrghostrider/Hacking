@@ -1,5 +1,5 @@
-// O(N^3 log N) time Papadimitrious algorithm implementation
-// very naive - need to optimize
+// O(n^3 log n) naive implementation of papadimitrious' algorithm
+// need to make improvements
 #include <cstdio>
 #include <iostream>
 #include <fstream>
@@ -137,7 +137,7 @@ unsigned int TwoSatProblem::PickUnsatClause_() const
     }
 
     RandomGen rg(0, unsat.size()-1);
-    return rg.getRand();
+    return unsat[rg.getRand()];
 }
 
 bool TwoSatProblem::isSolvable() 
