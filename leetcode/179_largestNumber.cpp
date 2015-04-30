@@ -63,10 +63,9 @@ public:
         Sorter sorter;
         std::sort(numstr.begin(), numstr.end(), sorter);
 
-        std::string retval;
-        for (auto it = numstr.begin(); it != numstr.end(); it++) {
-            retval += (*it);
-        }
+        std::string retval = std::accumulate(numstr.begin(), numstr.end(), string(), [] (const string& lhs, const string& rhs) -> string {
+            return (lhs + rhs);
+        });
         retval = stripLeadingZeroes(retval);
         return retval;
     }
