@@ -61,6 +61,6 @@ public:
             retval += std::to_string(digits_[i]);
         }
         if (isRepeat) retval += ")";
-        
+        return retval;
     }
 };
