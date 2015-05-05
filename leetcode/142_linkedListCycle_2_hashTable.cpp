@@ -7,14 +7,14 @@
  * };
  */
 class Solution {
-    unordered_map<ListNode*, bool> nodeMap_;
+    unordered_set<ListNode*> nodeSet_;
 public:
     ListNode *detectCycle(ListNode *head) {
         if (head == NULL || head->next == NULL) return false;
         ListNode *ptr=head;
         while (ptr) {
-            nodeMap_.insert(make_pair(ptr, true));
-            if (nodeMap_.find(ptr->next) != nodeMap_.end()) return ptr->next;
+            nodeSet_.insert(ptr);
+            if (nodeSet_.find(ptr->next) != nodeSet_.end()) return ptr->next;
             ptr = ptr->next;
         }
         return NULL;
