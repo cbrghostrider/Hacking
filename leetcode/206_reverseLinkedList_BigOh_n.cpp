@@ -7,25 +7,15 @@
  * };
  */
 class Solution {
-    ListNode* newHead_;
 public:
-    ListNode* reverseListPrime(ListNode* head) {
-        if (head->next == NULL) {
-            newHead_ = head;
-            return head;
-        }
-        
-        ListNode* recurseOn = head->next;
-        ListNode* me = head; 
-        me->next = NULL;
-        ListNode *getTail = reverseListPrime(recurseOn);
-        getTail->next = me;
-        return me;
-    }
-    
     ListNode* reverseList(ListNode* head) {
-        if (head == NULL) return head;
-        reverseListPrime(head);
-        return newHead_;
+        ListNode* reversedRestHead = NULL;
+        while (head) {
+            ListNode *headNext = head->next;
+            head->next = reversedRestHead;
+            reversedRestHead = head;
+            head = headNext;
+        }
+        return reversedRestHead;
     }
 };
