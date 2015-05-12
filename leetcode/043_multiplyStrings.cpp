@@ -1,7 +1,8 @@
 // Solution is algorithmically O(n^1.585) due to divide and conquer, 
 // which is better than the naive O(n^2) double for loop
 // However, since I am passing all strings by value, and constantly padding zeros, 
-// the constants are rather high :P
+// the constants are rather high, also string concat is O(n), 
+// which really butchers the algorithmic advantages of D&C (no longer O(n^1.585))!!
 // Need to optimize the implementation to fare better.
 class Solution {
 private:
