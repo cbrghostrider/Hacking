@@ -13,8 +13,7 @@ public:
         //i.e. at each step, first multiply result by x if bk is set (for k from 0->31)
         //                 , then multiply x by itself to get new x
 	//                 
-	//this makes it (essentially) constant time for any integer, and 
-	//especially constant time for any 32-bit integer
+	//since n has log n bits in it, this makes it O(log n)
         double result = 1.0;
         while (n != 0) {
             if (n & 1) {
