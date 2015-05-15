@@ -1,10 +1,13 @@
-//solution works fine in linux, tested it
+//Attempt 1: solution works fine in linux, tested it
 //but too slow, online judge (OJ) gives time limit exceeded
 //need to find a way to speed it up
 //problem is that I am generating too many combinations, and throwing out most of them
 //I need a way to generate fewer combinations to begin with, rather than filtering out the bad ones
 //The algorithmic complexity lower bound on this problem is omega(C(n)) where C(n) is the catalan number of n
 
+//
+//EDIT: Check attempt 2 (better). That is much cleaner code, and solves this problem (OJ accepted).
+//
 #include <iostream>
 #include <cstdio>
 #include <utility>
