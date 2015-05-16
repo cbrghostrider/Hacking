@@ -1,5 +1,3 @@
-//works fine, for corner cases as well
-//need to make code more concise though in a future attempt!
 class Solution {
     
     void eatDotSlash(string& path) {
@@ -38,15 +36,19 @@ class Solution {
         }
     }
     
-    //initially tokenize the string into "../" and NOT-"../" tokens
-    //then treat a NOTDotDotSlash-followed-by-DotDotSlash as a NOP
     void simplifyDotDotSlash(string& path) {
         if (path.length() == 0) return;
         
         vector<string> stack;
         while (path.length()) {
             if (path.substr(0, 3) == "../") {
-                stack.push_back("../");
+                if (stack.empty() || stack.back() == "../") {
+                    stack.push_back("../");
+                } else if (stack.back() == "/")  {
+                    ; // "/" will eat the "../"
+                } else {
+                    stack.pop_back(); //both will annihilate each other
+                }
                 path = path.substr(3);
             } else {
                 size_t fst = path.find_first_of("/");
@@ -60,60 +62,25 @@ class Solution {
             }
         }
         
-        int dotdotslash = 0; //records excess "../"
-        string final;        //the final output string
-        string topstr = stack.back(); stack.pop_back();
+        string final;
         while (!stack.empty()) {
-            string nextstr = stack.back(); stack.pop_back();
-            if (topstr == "../" && nextstr == "../") {
-                dotdotslash++;
-            } else if (topstr == "../" && nextstr == "/") { //topstr eaten by nextstr
-                if (dotdotslash) {
-                    dotdotslash = 0; //all accumulated "../" will be eaten as well
-                }
-                topstr = nextstr;
-            } else if (topstr == "../" && nextstr != "../")  {//nextstr and topstr annihilate
-                if (dotdotslash) {
-                    dotdotslash--;
-                } else if (stack.empty() ) {
-                    topstr = "";
-                    break;
-                } else {
-                    topstr = stack.back(); stack.pop_back();
-                }
-            } else if (topstr != "../") {
-                final = topstr + final;
-                topstr = nextstr;
-            }
+            final = stack.back() + final;
+            stack.pop_back();
         }
-        path = topstr + final;
-        while (dotdotslash--) {
-            path = "../" + path;
-        }
+        path = final;
     }
     
 public:
     string simplifyPath(string path) {
         if (path.length() == 0) return path;
-        
         path += "/"; //add trailing slash
-        
-        bool change=true;
-        while (change) {
-            string orig = path;
-            change = false;
             
-            eatDotSlash(path);
-        
-            simplifySlashes(path);    
-            
-            simplifyDotDotSlash(path);
-            
-            if (orig != path) change = true;
-        }
-        
+        eatDotSlash(path);
+        simplifySlashes(path);    
+        simplifyDotDotSlash(path);
+
         if (path.length() > 1 && path[path.size()-1] == '/') path.pop_back();
         if (path.length() == 0) path = ".";
-        return path;
+        return path;     
     }
 };
