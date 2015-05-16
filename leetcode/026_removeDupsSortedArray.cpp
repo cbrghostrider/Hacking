@@ -1,3 +1,4 @@
+// similar to std::unique()
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
