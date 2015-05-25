@@ -1,0 +1,29 @@
+Here is a random question I answered on glassdoor (Jane Street interview question):
+
+ There is a company, modelled as a tree of employees and the people reporting to them. Every employee has a fun value. At a party, every employee only has fun if his direct boss is not at the party, otherwise he adds fun corresponding to his fun value to the party. Write code to find the maximum total fun that can be had at the party. 
+
+Answer:
+So basically, we have to write a function that, given a tree, returns the maximum fun value of that tree.
+
+This sounds like a dynamic programming problem. At any node, consider the best of the following cases:
+1. Include fun-level of node therefore excluding all its children. Recurse on children of children of node.
+2. Don't include fun-level of node, and recurse on all children of node.
+Take maximum of 1 and 2.
+
+Here is a non-memoized version (hence non-DP):
+
+data Tree a = EmptyTree | Node a [Tree a]
+
+children :: Tree a -> [Tree a]
+children EmptyTree = []
+children (Node _ cs) = cs
+
+maxFun :: Tree Int -> Int
+maxFun Emptytree = 0
+maxFun (Node x cs) =
+  let grandchildren = concat . map children $ cs
+       candidate1 = x + (sum . map maxFun $ grandchildren)
+       candidate2 = sum . map maxFun $ cs
+  in maximum [candidate1, candidate2]
+
+The problem with the above is of course we are solving the same subproblems again and again. To make it truly dynamic programming, you have to memoize the calculations.
