@@ -63,8 +63,8 @@ public:
         if (s.find("..") != string::npos) return false;
         if (s.find("+-") != string::npos) return false;
         if (s.find("-+") != string::npos) return false;
+        if (s.find("++") != string::npos) return false;
         if (s.find("--") != string::npos) return false;
         return isNumberPrime(s);
     }
 };
-
