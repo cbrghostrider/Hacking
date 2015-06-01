@@ -13,9 +13,11 @@ class Solution {
     void setCache(string s1, string s2, string s3, bool val) {cache.insert(make_pair(makeHash(s1, s2, s3), val));}
 public:
     bool isInterleave(string s1, string s2, string s3) {
+        //first check the cache, if found, just return it
         auto it = cache.find(makeHash(s1, s2, s3));
         if (it != cache.end()) return it->second;
 
+        //now check the strings for match
         int s1p=0, s2p=0, s3p=0;
         for (;s3p<s3.length(); s3p++ ) {
 	    //if both s1p and s2p characters match s3p character, then I have to 
@@ -26,18 +28,21 @@ public:
                 setCache(s1, s2, s3, ret);
                 return ret;
             } else if (s1p < s1.length() && s1[s1p] == s3[s3p]){
+                //only s1p matched, therefore just consume it
                 s1p++;
             } else if (s2p < s2.length() && s2[s2p] == s3[s3p]) {
+                //only s2p matched, therefore just consume it
                 s2p++;
             } else {
+                //neither match, this is not going to match
                 bool ret = false;
                 setCache(s1, s2, s3, ret);
                 return ret;
             }
         }
+        //in the end, if I consumed all of all strings, then matching!
         bool ret = (s1p == s1.length() && s2p == s2.length() && s3p == s3.length());
         setCache(s1, s2, s3, ret);
         return ret;
     }
 };
-
