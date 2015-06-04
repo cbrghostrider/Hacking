@@ -87,20 +87,20 @@ getCellValue (Branch v _ _)   []     = v
 getCellValue (Branch _ l _) ('<':ps) = getCellValue l ps
 getCellValue (Branch _ _ r) ('>':ps) = getCellValue r ps
 
+
 --------------------------------------------------------------------------
 --                      I/O, Main section, etc.
 --------------------------------------------------------------------------
 
-runTestCases :: TreeCA -> RuleCA -> Int -> Int -> IO ()
+runTestCases :: [TreeCA] -> RuleCA -> Int -> Int -> IO ()
 runTestCases _ _ 0 _ = return ()
-runTestCases tree rule testsrem cursteps = do
+runTestCases alltrees rule testsrem cursteps = do
   ip <- getLine
   let [nstr, pathstr] = words $ ip
   let newsteps = cursteps + (read nstr)
-  let newtree = (automataTrees tree rule) !! newsteps
-  let output  = getCellValue newtree (init . tail $ pathstr) 
+  let output   = getCellValue (alltrees !! newsteps) (init . tail $ pathstr) 
   putStrLn $ if output == True then "X" else "."
-  runTestCases tree rule (testsrem-1) newsteps
+  runTestCases alltrees rule (testsrem-1) newsteps
 
 main :: IO ()
 main = do
@@ -110,7 +110,5 @@ main = do
   let rule  = createRule (read rulestr)
   let tree  = createInitTree (concat . words $ treestr)
   let tests = read teststr
-  runTestCases tree rule tests 0
-
-
-
+  let alltrees = (automataTrees tree rule)
+  runTestCases alltrees rule tests 0
