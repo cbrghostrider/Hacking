@@ -112,3 +112,4 @@ main = do
   let tests = read teststr
   let alltrees = (automataTrees tree rule)
   runTestCases alltrees rule tests 0
+
