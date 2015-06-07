@@ -1,3 +1,8 @@
+-- -------------------------------------------------------------------------------------
+--         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+--                       For email, run on linux (perl v5.8.5):
+--   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+-- -------------------------------------------------------------------------------------
 -- Lazy Dynamic Programming to solve problem
 -- https://code.google.com/codejam/contest/2994486/dashboard#s=p0&a=0
 import System.Environment (getArgs)
