@@ -1,3 +1,8 @@
+-- -------------------------------------------------------------------------------------
+--         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+--                       For email, run on linux (perl v5.8.5):
+--   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+-- -------------------------------------------------------------------------------------
 -- Since the time to pop a bubble is 1, and the time for an unsuccessful attempt is 1, 
 -- all we have to do is compute the expected number of attempts to pick ALL bubbles
 -- For any bubble, the last attempt for a bubble is when it is popped, while all the attempts prior

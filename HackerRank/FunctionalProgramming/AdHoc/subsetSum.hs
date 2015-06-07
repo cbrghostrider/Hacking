@@ -1,3 +1,8 @@
+-- -------------------------------------------------------------------------------------
+--         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+--                       For email, run on linux (perl v5.8.5):
+--   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+-- -------------------------------------------------------------------------------------
 -- currently timing out on big inputs even though Im using binary search!
 -- not sure why... I tried to use deepseq to force eval of the cumulative sum list, but it didn't make a difference. 
 -- Need to optimize from 16 sec to < 5 sec. Open to suggestions!
