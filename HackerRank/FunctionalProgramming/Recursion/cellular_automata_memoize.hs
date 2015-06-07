@@ -62,7 +62,8 @@ simulateAutomataStep parentv rule (Branch v l r) =
   in  Branch mynewval mynewleft mynewright
 
 automataTrees :: TreeCA -> RuleCA -> [TreeCA]
---automataTrees starttree rule = (starttree) : [ simulateAutomataStep Nothing rule ((automataTrees starttree rule) !! (n-1)) | n <- [1..]]
+-- FIXED this function after suggestions w/ several people from Haskell Beginners List
+-- Henk-Jan van Tuyl, Stefan Hock, etc.
 automataTrees starttree rule = iterate (simulateAutomataStep Nothing rule) starttree
 
 --------------------------------------------------------------------------
