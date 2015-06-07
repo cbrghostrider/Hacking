@@ -1,3 +1,8 @@
+// -------------------------------------------------------------------------------------
+//         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+//                       For email, run on linux (perl v5.8.5):
+//   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+// -------------------------------------------------------------------------------------
 // The problem with the straightforward O(n^2) DP solution is the inner for loop. 
 // If the input array is reverse sorted array from [n...1, 1, 0] then the 
 // algorithmic complexity will hit the worst case O(n^2). 

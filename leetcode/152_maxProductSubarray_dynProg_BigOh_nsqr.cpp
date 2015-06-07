@@ -1,3 +1,8 @@
+// -------------------------------------------------------------------------------------
+//         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+//                       For email, run on linux (perl v5.8.5):
+//   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+// -------------------------------------------------------------------------------------
 //Two tricks for space optimization:
 //Trick 1: Since I only use last sz array, I can keep just a 2 dimensional array with first dimension[2]
 //Trick 2: Since 1 is identity for multiplication, after recording max of array, 

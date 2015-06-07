@@ -1,3 +1,8 @@
+// -------------------------------------------------------------------------------------
+//         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+//                       For email, run on linux (perl v5.8.5):
+//   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+// -------------------------------------------------------------------------------------
 // note that both the forward pointer (ind) and the back pointer (indElim) only move forward. 
 // In particular, indElim never moves backward other than the minor decrement after increment. 
 // In the worst case, both pointers move length O(n), and solution is O(n)

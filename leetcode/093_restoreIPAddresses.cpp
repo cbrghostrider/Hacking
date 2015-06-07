@@ -1,3 +1,8 @@
+// -------------------------------------------------------------------------------------
+//         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+//                       For email, run on linux (perl v5.8.5):
+//   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+// -------------------------------------------------------------------------------------
 class Solution {
     bool isValid(string s) {
         return (!((s.length() == 0) || (s.length() > 3) || (s.length() >= 2 && s[0] == '0') || (stoi(s) > 255)));

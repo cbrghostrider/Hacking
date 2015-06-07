@@ -1,3 +1,8 @@
+// -------------------------------------------------------------------------------------
+//         Author: Sourabh S Joshi (cbrghostrider); Copyright - All rights reserved.
+//                       For email, run on linux (perl v5.8.5):
+//   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
+// -------------------------------------------------------------------------------------
 //picks each number 1 by 1
 //the basic logic is as follows:
 //say you have n = 9 and k = 300000. i.e. we want the 300000th sequence for 9!
