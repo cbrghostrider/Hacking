@@ -3,16 +3,15 @@
 //                       For email, run on linux (perl v5.8.5):
 //   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
 // -------------------------------------------------------------------------------------
+// currently getting TLE for a really really big input (taking 2.5 seconds)
 
-// This solution currently gives memory limit exceeded
-// Presumably because some degenerate input case is leading to too much recursion
-//
 #include <iostream>
 #include <cstdio>
 #include <vector>
 #include <string>
 #include <utility>
 #include <assert.h>
+#include "calc.hpp"
 
 using std::pair;
 using std::make_pair;
@@ -23,30 +22,34 @@ class Solution {
     // expr = NUMBER | '(' expr ')' | expr '+' expr | expr '-' expr
     
     enum Operator {PLUS, MINUS};
-    
-    string eatWhiteSpaces(string s) {
-        string ret;
-        for (int i=0; i<s.size(); i++) {if (s[i] != ' ') ret.push_back(s[i]);}
-        return ret;
+
+    void eatWhiteSpaces(string& s) {
+        int cp=0;
+        for (int rp=0; rp<s.size(); rp++) {
+            if (s[rp] != ' ') {
+                s[cp++] = s[rp];
+            }
+        }
+        s.erase(cp, string::npos);
     }
     
-    pair<int, string> evalExprNumber(string str, bool isneg) {
+    int evalExprNumber(string& str, bool isneg) {
         auto pos = str.find_first_of("+-()");
         string nstr = str.substr(0, pos);
-        string rest = pos == string::npos ? "" : str.substr(pos);
+        str = pos == string::npos ? "" : str.substr(pos);
         int mult = isneg ? -1 : 1;
-        return make_pair(stoi(nstr) * mult, rest);
+        return (stoi(nstr) * mult);
     }
     
-    pair<int, string> evalExprBrackets(string s, bool isneg) {
-        assert(s[0] == '(');
-        pair<int, string> vsp = expr(s.substr(1), false);
-        string retstr = vsp.second.substr(1); //drop trailing ')'
+    int evalExprBrackets(string& s, bool isneg) {
+        s = s.substr(1); //drop leading '('
+        int val = expr(s, false);
+        s = s.substr(1); //drop trailing ')'
         int mult = isneg ? -1 : 1;
-        return make_pair(vsp.first * mult, retstr);
+        return (val * mult);
     }
     
-    pair<int, string> eval(string s, bool isneg) {
+    int eval(string& s, bool isneg) {
         if (s[0] == '(') {
             return evalExprBrackets(s, isneg);
         } else {
@@ -55,26 +58,32 @@ class Solution {
     }
     
     //computes this string
-    pair<int, string> expr(string s, bool isneg) {
-        if (s.length() == 0) return make_pair(0, "");
-        pair<int, string> vsp = eval(s, isneg);
+    int expr(string& s, bool isneg) {
+        if (s.length() == 0) return 0;
+        int val = eval(s, isneg);
         
-        string& rest = vsp.second;
-        if (rest.empty() || rest[0] == ')') {
-            return vsp;
+        if (s.empty() || s[0] == ')') {
+            return val;
         }
         
-        bool passneg = rest[0] == '-';
-        rest = rest.substr(1);
-        pair<int, string> rvsp = expr(rest, passneg);
+        bool passneg = s[0] == '-';
+        s = s.substr(1);
+        int rval = expr(s, passneg);
         
-        return make_pair(vsp.first + rvsp.first, rvsp.second);
+        return (val + rval);
     }
     
 public:
     int calculate(string s) {
         s = eatWhiteSpaces(s);
-        auto compute = expr(s, false);
-        return compute.first;
+        return expr(s, false);
     }
 };
+
+int main()
+{
+    string s(EXPRCALC);
+    Solution sln;
+    int ans = sln.calculate(s);
+    std::cout << ans << std::endl;
+}
