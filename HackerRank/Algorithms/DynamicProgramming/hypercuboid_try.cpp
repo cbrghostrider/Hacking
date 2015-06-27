@@ -107,20 +107,20 @@ void HyperCube::generateAllIndices(vector<vector<int>>& seed, int curdim) {
     generateAllIndices(seed, curdim+1);
 }
 
+/*
 void printAllIndices(vector<vector<int>>& indices) {
     for (vector<int> index : indices) {
-        std::cout << "["
+        std::cout << "[";
         for (int i=0; i<index.size(); i++) std::cout << index[i] << " ";
         std::cout << "]" << std::endl;
     }
-}
+}*/
 
 Ways HyperCube::computeWays() {
     allocateCache();
 
     vector<vector<int>> allIndices(1, vector<int>());
     generateAllIndices(allIndices, 0);
-    printallIndices(allIndices);
 
     //take the required number of steps
     int prev=0, next=1;
@@ -139,6 +139,7 @@ Ways HyperCube::computeWays() {
                     curWays += readIndex(stepIndexMinus, prev);
                 }
             }
+            curWays %= ((Ways) 1000000007);
             writeIndex(index, curWays, next);
         }
         next = 1-next;
