@@ -5,6 +5,9 @@
 // -------------------------------------------------------------------------------------
 // Functionally correct version, using independence of dimensions
 // also using divide and conquer for the sets of dimensions
+// 
+// Credit: Part of the credit for this final version goes to Peter Shor from MIT, 
+// who's suggestions on stackexchange helped me optimize the algorithm!
 //
 #include <cmath>
 #include <cstdio>
