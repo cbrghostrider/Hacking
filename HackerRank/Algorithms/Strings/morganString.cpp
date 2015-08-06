@@ -6,6 +6,7 @@
 // 
 // This problem is driving me NUTS! 
 // I'm trying to solve this in O(n), and currently passing 9/17, the rest are WA.
+// EDIT: Bug fixed. All tests pass within the 2 sec time limit now.
 //
 // Here is the main issue with the problem:
 //
@@ -43,7 +44,11 @@
 // Unfortunately there is some bug somewhere, which causes 1 test pair from each of the tests from 10 onwards to fail.
 // If you can get through the convoluted code below, and spot and fix the bug, PLEASE shoot me an email! :-)
 //
-
+// EDIT: Fixed the bug. It had to do with the case shown below in processStateEqual
+//       Basically, I needed an additional rollback point. Compare the corresponding cases
+//       in processStateGreater and processStateLesser, to see why.
+//
+//       I apologize, the code is really convoluted. I would like to come back and clean it up sometime! ;)
 #include <iostream>
 #include <cstdio>
 #include <string>
@@ -56,7 +61,7 @@ using std::vector;
 
 //s1p is the same as s2p
 // how does s1p compare against s2future?
-void processStateEqual(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, bool& stateequal) {
+void processStateEqual(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, int& rollbackpoint, bool& stateequal) {
     int delta = s1p - s1eqind;
     int s2future = s2p + delta;
     if (s2future < str2.length()) {
@@ -65,20 +70,26 @@ void processStateEqual(string& ret, const string& str1, const string& str2, int&
             // CABCCCC
             // CABAAAA
             // |
-            s2p = s2future;
+            s2p = rollbackpoint == -1 ? s2future : s2p + (rollbackpoint- s1eqind);
+            if (rollbackpoint != -1) { for (int c=0; c<(s1p-rollbackpoint); c++) ret.pop_back(); }
             s1p = s1eqind;
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         } else if (str1[s1p] < str2[s2future]) { //previous call was correct
             //    |
             // CABCCCC
             // CABDDDD
             // |
-            stateequal = false; 
+            stateequal = false; rollbackpoint = -1;
         } else { //same
             //    |
             // CABCCCC
             // CABCCCC
             // |
+	    //PROGRAMMER BEWARE: This is where the nasty bug was found. Basically compare these else cases in the 
+	    // processStateLesser and processStateGreater functions. This case is on the fence, and we really need 
+	    // to go futher down the road to figure out how it proceeds. If speculation fails, I need
+	    // to rollback to this point
+            if (rollbackpoint == -1) {rollbackpoint = s1p;}  
             ret.push_back(str1[s1p++]); //choose str1 speculatively
         }
     }  else {
@@ -86,13 +97,13 @@ void processStateEqual(string& ret, const string& str1, const string& str2, int&
         // CABCCCC
         // CAB
         // |
-        stateequal = false;
+        stateequal = false; rollbackpoint = -1;
     }
 }
 
 // s1p is lesser than s2p
 // how does s1p compare to s2future?
-void processStateLesser(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, bool& stateequal) {
+void processStateLesser(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, int& rollbackpoint, bool& stateequal) {
     int delta = s1p - s1eqind;
     int s2future = s2p + delta;
     if (s2future < str2.length()) {
@@ -101,15 +112,16 @@ void processStateLesser(string& ret, const string& str1, const string& str2, int
             // CABBBBB
             // CABABBB
             // |
-            s2p = s2future;
+            s2p = rollbackpoint == -1 ? s2future : s2p + (rollbackpoint- s1eqind);
+            if (rollbackpoint != -1) { for (int c=0; c<(s1p-rollbackpoint); c++) ret.pop_back(); }
             s1p = s1eqind;
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         } else if (str1[s1p] < str2[s2future]) { //previous call was correct
             //    |
             // CABACCC
             // CABDDDD
             // |
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         } else { //same
             //    |
             // CABACCC
@@ -122,13 +134,13 @@ void processStateLesser(string& ret, const string& str1, const string& str2, int
         // CABACCC
         // CAB
         // |
-        stateequal = false;
+        stateequal = false; rollbackpoint = -1;
     }
 }
 
 // s1p is greater than s2p
 // how does s2p compare to s2future?
-void processStateGreater(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, bool& stateequal) {
+void processStateGreater(string& ret, const string& str1, const string& str2, int& s1p, int& s2p, int& s1eqind, int& s2eqind, int& rollbackpoint, bool& stateequal) {
     int delta = s1p - s1eqind;
     int s2future = s2p + delta;
     if (s2future < str2.length()) {
@@ -137,21 +149,22 @@ void processStateGreater(string& ret, const string& str1, const string& str2, in
             // CABFCCC
             // CABGDDD
             // |
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         } else if (str1[s1p] > str2[s2future]) {
             //    |
             // CABFCCC
             // CABEDDD
             // |
-            s2p = s2future;
+            s2p = rollbackpoint == -1 ? s2future : s2p + (rollbackpoint- s1eqind);
+            if (rollbackpoint != -1) { for (int c=0; c<(s1p-rollbackpoint); c++) ret.pop_back(); }
             s1p = s1eqind;
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         } else {
             //    |
             // CABFCCC
             // CABFDDD
             // |
-            stateequal = false; //PROGRAMMER BEWARE! Deceptive.
+            stateequal = false; rollbackpoint = -1;
         }
     } else {
         //    |
@@ -160,7 +173,7 @@ void processStateGreater(string& ret, const string& str1, const string& str2, in
         // |
         //s2p = s2future;
         //s1p = s1eqind;
-        stateequal = false;
+        stateequal = false; rollbackpoint = -1;
     }
 }
 
@@ -169,6 +182,7 @@ void processStrings(const string& str1, const string& str2) {
     string ret;
     int s1p=0, s2p=0;
     int s1eqind = -1, s2eqind = -1;
+    int rollbackpoint=-1;
 
     //stateequal denotes the following invariant
     //  Everything from [s1eqind, s1p] is the same as everything from [s2eqind, s2eqind + (s1eqind - s1p)]
@@ -182,13 +196,13 @@ void processStrings(const string& str1, const string& str2) {
         }
         if (str1[s1p] < str2[s2p]){
             if (stateequal) {
-                processStateLesser(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, stateequal);
+                processStateLesser(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, rollbackpoint, stateequal);
             } else {
                 ret.push_back(str1[s1p++]);
             }
         }else if (str1[s1p] > str2[s2p]){
             if (stateequal) {
-                processStateGreater(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, stateequal);
+                processStateGreater(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, rollbackpoint, stateequal);
             } else {
                 ret.push_back(str2[s2p++]);
             }
@@ -199,15 +213,16 @@ void processStrings(const string& str1, const string& str2) {
                 s2eqind = s2p;
                 ret.push_back(str1[s1p++]); //choose str1 speculatively
             } else {
-                processStateEqual(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, stateequal);
+                processStateEqual(ret, str1, str2, s1p, s2p, s1eqind, s2eqind, rollbackpoint, stateequal);
             }
         }
         if (stateequal && s1p == str1.length()) { //and we are in equal state, swap
             int delta = s1p - s1eqind;
             int s2pfuture = s2p + delta;
-            s2p = s2pfuture;
+            s2p = rollbackpoint == -1 ? s2pfuture : s2p + (rollbackpoint- s1eqind);
+            if (rollbackpoint != -1) { for (int c=0; c<(s1p-rollbackpoint); c++) ret.pop_back(); }
             s1p = s1eqind;
-            stateequal = false;
+            stateequal = false; rollbackpoint = -1;
         }
     }
 
