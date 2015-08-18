@@ -3,6 +3,7 @@
 //                       For email, run on linux (perl v5.8.5):
 //   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
 // -------------------------------------------------------------------------------------
+
 #include <iostream>
 #include <cstdio>
 #include <algorithm>
@@ -22,6 +23,46 @@ int read4(char *buf) {
     }
     return retval;
 }
+
+// -------------------------------------------------------------------------------------
+// Update: Here is a better solution from my solution to #157
+// -------------------------------------------------------------------------------------
+
+class Solution {
+    char readBuf[4];
+    int rbptr=0;
+    int available=0;
+public:
+    /**
+     * @param buf Destination buffer
+     * @param n   Maximum number of characters to read
+     * @return    The number of characters read
+     */
+    int read(char *buf, int n) {
+        int bufptr=0;
+        while (n) {
+            if (available) {
+                buf[bufptr++] = readBuf[rbptr];
+                rbptr = (rbptr+1) % 4;
+                available--;
+                n--;
+                continue;
+            } else {
+                available = read4(readBuf);
+                rbptr=0;
+                if (available == 0) return bufptr;
+                continue;
+            }
+        }
+        return bufptr;
+    }
+};
+
+// -------------------------------------------------------------------------------------
+// Update: And here is the older solution
+// -------------------------------------------------------------------------------------
+
+class Solution {
 
 class Solution {
     char readBuf[4];  //always read into here (always stored from start, even if fewer than 4)
