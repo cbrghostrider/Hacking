@@ -3,6 +3,8 @@
 //                       For email, run on linux (perl v5.8.5):
 //   perl -e 'print pack "H*","736f75726162682e732e6a6f73686940676d61696c2e636f6d0a"'
 // -------------------------------------------------------------------------------------
+// Although the loop is O(n^2) iterations, work done per iteration is O(n) due to check for palindrome
+// Need to precompute and cache those results to make this truly O(n^2)
 class Solution {
     bool isPalindrome_(const string& s) {
         for (int i=0; i<s.length()/2; i++) {
