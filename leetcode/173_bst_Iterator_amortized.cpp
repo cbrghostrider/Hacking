@@ -12,7 +12,11 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
- 
+//
+//  Warning: This solution is way too cumbursome and ugly. 
+//  I must have had a major brain fart when I wrote this. ;)
+//  My other solution is way more elegant, and just as efficient!
+//
 //Amortized data structure for O(1) average time, and O(h) memory
 //
 //The iterator maintains an inner vector of ptrs, of O(h) size for the next O(h) minimums
