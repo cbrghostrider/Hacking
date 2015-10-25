@@ -43,7 +43,7 @@ sub addCopyrightIfNeeded {
     my ($dir, $files, $cprlines) = @_;
     foreach my $f (@$files) {
 	my $breakout = 0;
-	my $file = $dir."\\".$f;
+	my $file = $dir."/".$f;
         open my $in,  '<',  "$file"      or die "Can't read old file $file: $!";
         open my $out, '>',  "$file.new"  or die "Can't write new file $file.new: $!";
 
