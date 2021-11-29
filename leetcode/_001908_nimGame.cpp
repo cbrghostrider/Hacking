@@ -1,35 +1,8 @@
 class Solution {
     
-    // Some thoughts for non-DP.
-    // If there is only one pile, the first person can take all stones and win.
-    // If there are two piles:
-    //   if each has only 1 stone, then the second person wins (pick 1, pick 1)
-    //   if one has 1 stone, and the other has n stones, the first person wins (pick n-1, pick 1, pick 1)
-    //   if two piles have n, m stones, then the person to play will try to force the piles to go into 
-    //          one of the above eventually.
-    // Generally:
-    //  Alice/Bob will try to force the game into a "forced-odd-remaining" state at their turn,  
-    //        i.e. where odd number of forced moves remain (when they play).
-    //  Similarly Alice/Bob will try to get a "forced-even-remaining" state, when the other person has to play.
-    // A move is forced, when there is exactly 1 of each remaining in all the piles
-    // 
-    // (1, 1) bob wins
-    // (1, 2) alice wins
-    // (2, 2) bob wins
-    // (2, 3) alice wins....
-    // so with 2 piles, if odd number of total stones, then person playing first wins (and vice versa).
-    //
-    // (1, 1, n) alice wins
-    // (1, 2, 2) alice wins (picks 1, now (2, 2) state, where second person wins)
-    // (1, n, m) if (n+m is even, then alice will pick 1 pile of 1 stone and win eventually)
-    //           if (n+m is odd, alice will pick 2 from a single pile to keep it odd)
-    // (2, 2, 2) alice wins... similarly to above
-    //
-    // Let n be number of piles with exactly 1 stone.
-    // let m be the number of piles with more than 1 stone.
-    // and k be TOTAL number of stones "in excess" (i.e. beyond 1 per pile) among all piles.
-    //
-    // TODO.... non dp
+     // EDIT: For non-DP solution, refer to sprague-grundy theorem.
+     // FML...
+     // https://cp-algorithms.com/game_theory/sprague-grundy-nim.html
 public:
     ///////////////////////////////////////////////////////////////////////////////
     // The following is a top down DP centric solution.
