@@ -6,8 +6,8 @@ class Solution {
     };
 public:
     // For each index i, we will store the following.
-    // 1. The sum and end index of the longest subarray of length firstLen so far.
-    // 2. The sum and end index of the longest subarray of length secondLen so far.
+    // 1. The sum of the max subarray of length firstLen so far.
+    // 2. The sum of the max subarray of length secondLen so far.
     // (Note that 1 and 2 could overlap in this, we will handle that in the recurrence).
     // 3. The max sum of 2 non-overlapping subarrays of firstLen and secondLen.
     // Let us call this struct Info.
