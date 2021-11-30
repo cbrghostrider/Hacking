@@ -1,9 +1,7 @@
 class Solution {
     struct Info {
         int max_first=std::numeric_limits<int>::min();
-        // int max_first_end_index=0;
         int max_second=std::numeric_limits<int>::min();
-        // int max_second_end_index=0;
         int max_sum=std::numeric_limits<int>::min();
     };
 public:
