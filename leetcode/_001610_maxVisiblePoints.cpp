@@ -52,7 +52,7 @@ class Solution {
     
 public:
     // O(n ^2) algorithm.
-    int visiblePoints(vector<vector<int>>& points, int angle, vector<int>& location) {
+    int visiblePoints_1(vector<vector<int>>& points, int angle, vector<int>& location) {
         double angle_rads = angle * PI / 180.0;
         origin = {location[0], location[1]};
         
@@ -81,9 +81,9 @@ public:
         }
         return max+origin_count;
     }
-    
-    // O(n log n) time.
-    int visiblePoints_nlogn(vector<vector<int>>& points, int angle, vector<int>& location) {
+
+     // O(n log n) time.
+    int visiblePoints(vector<vector<int>>& points, int angle, vector<int>& location) {
         double angle_rads = angle * PI / 180.0;
         origin = {location[0], location[1]};
         
@@ -103,14 +103,18 @@ public:
         int edge_ptr=0, check_ptr=0;
         int npoints=0;  // keeps track of points in current window
         unordered_map<int, int> counts;
+        bool wraparound =false;
+        
         while (edge_ptr < slopes.size()) {
-            while (check_ptr < slopes.size() && 
+            int limit = wraparound ? edge_ptr : slopes.size();
+            while (check_ptr < limit && 
                    isVisibleSlopes(slopes[edge_ptr], slopes[check_ptr], angle_rads)) {
                 check_ptr++;
                 npoints++;
             }
             if (check_ptr == slopes.size()) {  // we may have to wrap around and check
                 check_ptr=0;
+                wraparound = true;
                 while (check_ptr < edge_ptr && 
                        isVisibleSlopes(slopes[edge_ptr], slopes[check_ptr], angle_rads)) {
                     check_ptr++;
@@ -118,10 +122,12 @@ public:
                 }
             }
             counts[edge_ptr] = npoints;
-            if (npoints > max) {max = npoints;}
+            if (npoints > max) {
+                max = npoints;
+            }
             
             // if everything is visible, just break out
-            if (isVisibleSlopes(slopes[edge_ptr], slopes[check_ptr], angle_rads)) {break;}
+            if (check_ptr == edge_ptr) {break;}
             
             while (edge_ptr < slopes.size() && 
                    !isVisibleSlopes(slopes[edge_ptr], slopes[check_ptr], angle_rads)) {
@@ -130,5 +136,5 @@ public:
             }
         }
         return (max+origin_count);
-    }
+    }   
 };
