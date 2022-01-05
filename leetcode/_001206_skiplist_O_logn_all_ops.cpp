@@ -1,11 +1,3 @@
-
-#include <vector>
-#include <iostream>
-#include <utility>
-
-using std::vector;
-using std::pair;
-
 class Skiplist {
     struct Node {
         bool is_sentinel=false;  // special node to mark the start/end at any level
@@ -66,11 +58,11 @@ class Skiplist {
         }
         
         Node* last=node;  // Last node with up/down link
-	    Node* prev=node;  // prev node in linked list
+        Node* prev=node;  // prev node in linked list
         node = node->next;
         while (!node->is_sentinel && node->val < num) {
             if (isCrossLink(node)) last = node;
-			prev = node;
+            prev = node;
             node = node->next;
         }
         if (node->is_sentinel || node->val >= num) {node = prev;}
@@ -91,32 +83,32 @@ class Skiplist {
     // Recursively deletes nodes with value num in all skiplist levels, starting from the top.
     void recursiveDeleteDownwards(int num) {
         vector<pair<Node*, int>> stack;
-		stack.push_back({skiplist.back(), skiplist.size()-1});  // beginning sentinel in topmost level
+        stack.push_back({skiplist.back(), skiplist.size()-1});  // beginning sentinel in topmost level
 
-		bool done = false;  // will be done when num is eliminated in the lowest level
+        bool done = false;  // will be done when num is eliminated in the lowest level
 		                    // may or may not also be elim in one or more upper levels
-		while (!done) {
-			auto elem = stack.back(); stack.pop_back();
-			Node* node = elem.first;
-			if (node->down) {
-				stack.push_back({node->down, elem.second-1});
-			}
+        while (!done) {
+            auto elem = stack.back(); stack.pop_back();
+            Node* node = elem.first;
+            if (node->down) {
+                stack.push_back({node->down, elem.second-1});
+            }
 			
-			Node* prev=node;
-			node = node->next;
+            Node* prev=node;
+            node = node->next;
 			
-			while (!node->is_sentinel && node->val < num) {
-				if (node->down) stack.push_back({node->down, elem.second-1});
-				prev = node;
-				node = node->next;
-			}
-			if (node->is_sentinel || node->val > num) continue;  
-			if (node->val == num) {
-				prev->next = node->next;
-				delete node;
-				if (elem.second == 0) return;
-			}
-		}
+            while (!node->is_sentinel && node->val < num) {
+                if (node->down) stack.push_back({node->down, elem.second-1});
+                prev = node;
+                node = node->next;
+            }
+            if (node->is_sentinel || node->val > num) continue;  
+            if (node->val == num) {
+                prev->next = node->next;
+                delete node;
+                if (elem.second == 0) return;
+            }
+        }
     }
     
     // node is the closest smaller node in the lowermost level, that also has an uplink
@@ -161,46 +153,42 @@ public:
     }    
 
     void dump() {
-		std::cout << "------------------------------------------------------------" << std::endl;
+        std::cout << "------------------------------------------------------------" << std::endl;
         for (int i=skiplist.size()-1; i>=0; i--) {
-			std::cout << "L: " << i; ": ";
-			Node* node=skiplist[i];
-			while(node) {
-				if (node->is_sentinel) {
-					std::cout << "-> SENT";
-				} else {
-  				    std::cout << "-> " << node->val;
-				}
-				std::cout << "[";				
-				if (node->up) {std::cout << "U(" << node->up->val << ")";} else {std::cout << "   ";}
-				if (node->down) {std::cout << "D(" << node->down->val << ")";} else {std::cout << "   ";}
-				std::cout << "]";
-				node = node->next;
-			}
-			std::cout << std::endl;
-		}
-		std::cout << "------------------------------------------------------------" << std::endl;
+            std::cout << "L: " << i; ": ";
+            Node* node=skiplist[i];
+            while(node) {
+               if (node->is_sentinel) {
+                   std::cout << "-> SENT";
+               } else {
+                   std::cout << "-> " << node->val;
+               }
+               std::cout << "[";				
+               if (node->up) {std::cout << "U(" << node->up->val << ")";} else {std::cout << "   ";}
+               if (node->down) {std::cout << "D(" << node->down->val << ")";} else {std::cout << "   ";}
+               std::cout << "]";
+               node = node->next;
+           }
+           std::cout << std::endl;
+        }
+        std::cout << "------------------------------------------------------------" << std::endl;
     }
     
     
-    // O(log n) time.	
     bool search(int target) {
         auto elem = search(skiplist.size()-1, target, skiplist.back());
         return elem.second;
     }
     
-    // O(log n) time.	
     void add(int num) {
         auto elem = search(skiplist.size()-1, num, skiplist.back());
         if (elem.second) {
             updateFreq(elem.first, 1);
             return;
         }
-		// std::cout << "Search returned: " << elem.first->val << std::endl;
         add(num, elem.first);
     }
-   
-    // O(log n) time.	
+    
     bool erase(int num) {
         auto elem = search(skiplist.size()-1, num, skiplist.back());
         if (elem.second && elem.first->freq > 1) {
@@ -223,29 +211,3 @@ public:
  * bool param_3 = obj->erase(num);
  */
 
-void sl_search(Skiplist* sl, int num) {
-	std::cout << "Searching for " << num << std::endl;
-	if (sl->search(num)) {
-		std::cout << "Found " << num << std::endl;
-	} else {
-		std::cout << "Not Found " << num << std::endl;
-	}
-}
-
-int main() {
-	Skiplist *sl = new Skiplist();
-	sl->add(1); sl->dump();
-	sl->add(2); sl->dump();
-	sl->add(3); sl->dump();
-	sl_search(sl, 0);
-	sl->add(4); sl->dump();
-	sl_search(sl, 1);
-	sl->add(5); sl->dump();
-	sl_search(sl, 3);
-	sl_search(sl, 6);
-	sl->erase(2); sl->dump();
-	sl->add(2); sl->dump();
-	sl->add(2); sl->dump();
-	sl->erase(2); sl->dump();
-	sl->erase(2); sl->dump();
-}
