@@ -77,12 +77,21 @@ class Solution {
         return ((r * C) + (c));
     }
     
-    void initialize(const vector<vector<int>>& grid) {
+    void initialize(vector<vector<int>>& grid) {
         R=grid.size();
         C=grid[0].size();
         source = getIndex(0, 0);
         dest = getIndex(R-1, C-1);
         
+        // fast-forward step
+        // everything <= max(src, dst) value gets fast forwarded to it
+        int ff_val = std::max(grid[0][0], grid[R-1][C-1]);
+        for (int r=0; r<R; r++) {
+            for (int c=0; c<C; c++) {
+                if (grid[r][c] < ff_val) grid[r][c] = ff_val;
+            }
+        }
+                
         for (int r=0; r<R; r++) {
             for (int c=0; c<C; c++) {
                 int index = getIndex(r, c);
@@ -127,9 +136,13 @@ public:
         
         int curr_time=min_heap.top(); min_heap.pop();
         
-        while(!min_heap.empty()) {
-            int new_time = min_heap.top(); min_heap.pop();
-            
+        vector<int> times;
+        while (!min_heap.empty()) {
+            times.push_back(min_heap.top()); 
+            min_heap.pop();
+        }
+        
+        for (int new_time : times) {                                    
             // everything from curr_time to new_time in height should get connected if they are adjacent
             auto process = ht_to_leaders[curr_time];
             for (int ld : process) {
@@ -143,9 +156,9 @@ public:
                 if (heights[ld] != new_time) {
                     heights[ld] = new_time;                    
                     ht_to_leaders[heights[ld]].insert(ld);
-                }
-                ht_to_leaders.erase(curr_time);
+                }                
             }
+            ht_to_leaders.erase(curr_time);
             
             if (uf_find(source) == uf_find(dest)) return new_time;
             curr_time = new_time;
