@@ -28,8 +28,6 @@ class Solution {
     
     // Union between two leaders.
     void uf_union(int leader1, int leader2) {
-        leader1 = uf_find(leader1);
-        leader2 = uf_find(leader2);
         if (leader1 == leader2) return;
         
         if (sizes[leader1] >= sizes[leader2]) {
@@ -136,11 +134,12 @@ public:
             auto process = ht_to_leaders[curr_time];
             for (int ld : process) {
                 for (int neigh : group_info[ld][new_time]) {
+                    neigh = uf_find(neigh);
                     uf_union(ld, neigh);
                 }
             }
             for (int p : process) {
-                int ld = uf_find(p);
+                int ld = p;  
                 if (heights[ld] != new_time) {
                     heights[ld] = new_time;                    
                     ht_to_leaders[heights[ld]].insert(ld);
