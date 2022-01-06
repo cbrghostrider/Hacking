@@ -64,15 +64,9 @@ class Solution {
         
         for (int h : heights) {
             if (h <= min_height) continue;
-            set<int> combo1, combo2;
             std::set_union(l1_neighbors[h].begin(), l1_neighbors[h].end(), 
                            l2_neighbors[h].begin(), l2_neighbors[h].end(), 
-                           std::inserter(combo1, combo1.begin()));
-            for (int n : combo1) {
-                int n_leader = uf_find(n);
-                combo2.insert(n_leader);
-            }
-            new_neighbors[h] = combo2;
+                           std::inserter(new_neighbors[h], new_neighbors[h].begin()));
         }
         
         group_info.erase(leader1);
@@ -130,7 +124,7 @@ class Solution {
     
 public:
     int swimInWater(vector<vector<int>>& grid) {
-        initialize(grid);
+        initialize(grid);        
         if (uf_find(source) == uf_find(dest)) return grid[0][0];  // already connected at time 0
         
         int curr_time=min_heap.top(); min_heap.pop();
