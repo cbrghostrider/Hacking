@@ -24,8 +24,6 @@ class Solution {
             info.is_bst = true;
             return info;
         }
-        auto& nnn = *node;
-        
         
         Info lhs = traverse(node->left);
         Info rhs = traverse(node->right);
