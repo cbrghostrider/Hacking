@@ -25,7 +25,7 @@ public:
             // Add everything that covers coord and beyond
             int found_end=-200;  // out of bounds
             while (index < ranges.size() && ranges[index].start <= coord) {
-                if (ranges[index].end > found_end) {
+                if (ranges[index].end > found_end && ranges[index].end > coord) {
                     found_end = std::max(ranges[index].end, found_end);                    
                 }
                 index++;
