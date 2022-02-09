@@ -69,7 +69,7 @@ class Queue {
             if (size == 0) should_notify = true;
             size++;
         }
-        if (should_notify) cv_on_producer.notify_one();
+        if (should_notify) cv_on_producer.notify_all();
     }
 
     void getElem(T& elem) {
@@ -86,7 +86,7 @@ class Queue {
             if (size == capacity) should_notify = true;
             size--;
         }
-        if (should_notify) cv_on_consumer.notify_one();
+        if (should_notify) cv_on_consumer.notify_all();
     }
 };
 
@@ -139,9 +139,9 @@ class Consumer {
 
 int main() {
     Queue<string> buf(10);
-    int kNumProducers = 5;
-    int kNumConsumers = 5;
-    int kLimit=10;
+    int kNumProducers = 1000;
+    int kNumConsumers = 1000;
+    int kLimit=500;  // number of items produced by each
 
     std::vector<std::thread> producers, consumers;
     for (int i=0; i<kNumProducers; i++) {
