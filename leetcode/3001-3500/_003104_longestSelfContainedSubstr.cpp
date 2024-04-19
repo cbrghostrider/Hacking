@@ -2,20 +2,23 @@ class Solution {
 
 // The idea here is that if we assume that a solution contains a given character (e.g. 'a'), 
 // then it contains the entire substr from the earliest to the latest location containing 'a'.
-// Let these locations be [pb_a, pe_a].
+// Let these locations be [pb_a, pe_a]. i.e ptr_begin_a, ptr_end_a
+//
 // Now this in turn transitively brings in other letters. e.g. 'b'
-// So we can expand the interval to [min(pb_a, pb_b), max(pb_a, pb_b)]
-// This can only be done up to 26 times for each letter.
-// In the end we are left with either the whole string (so no solution assuming a is in the solution)
+// So we can expand the interval to [min(pb_a, pb_b), max(pe_a, pe_b)]
+// Note that 'b's interval isn't disjoint, since it occurred between 'a's start and end.
+// This can only be done up to 26 times, once for each letter.
+// In the end we are left with either the whole string (so no solution assuming 'a' is in the solution)
 // Or a substr, which is one candidate we have found.
 //
 // Now we just repeat the above process, for starting assumptions picking each possible character one-by-one.
 // In the end, we have explored the entire solution.
 //
 // As long as we are careful, each of the 26 starting solutions don't need to read each position in the string more than once.
+// This is because when we extend the initial interval, we only extend it leftwards or rightwards contiguously, and only check those new locations.
 // Thus the complexity is 26*O(n) = O(n)
 //
-// The only additional caveat happens when we find two independent such sequences, that are contiguous to each other.
+// The only additional caveat happens when we find two (or more) independent such sequences, that are contiguous to each other.
 // This is handled by the disjoint sets at the end of the main function, which tries to merge such sequences.
 //
 
