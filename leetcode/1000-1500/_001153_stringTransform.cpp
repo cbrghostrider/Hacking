@@ -19,14 +19,6 @@ bool is_impossible(const vector<int>& src, const vector<int>& dst) {
     return false;  // may be possible
 }
 
-bool same_positional_diff_str(const string& str1, const string& str2, const vector<int>& pos1, const vector<int>& pos2) {
-    bool same_pos = true;
-    for (int i=0; i<pos1.size(); i++) {
-        if (pos1[i] != pos2[i]) {same_pos = false; break;}
-    }
-    return (same_pos && str1 != str2);
-}
-
 public:
     bool canConvert(string str1, string str2) {
         if (str1.size() != str2.size()) return false;
